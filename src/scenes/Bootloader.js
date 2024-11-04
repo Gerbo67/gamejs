@@ -28,15 +28,19 @@ class Bootloader extends Phaser.Scene {
 
         // Crear el primer pájaro controlado con WASD
         this.bird = this.physics.add.image(200, 200, "Bird1");
+        this.bird.setCircle(25);
+        this.bird.setOffset(8, 0);
         this.bird.setCollideWorldBounds(true);
-        this.bird.setImmovable(false); // Hacer que el objeto pueda moverse pero colisione
-        this.bird.setBounce(0);  // Sin rebote al colisionar para efecto sólido
+        this.bird.setImmovable(false);
+        this.bird.setBounce(0);
 
         // Crear el segundo pájaro controlado con las flechas
         this.bird2 = this.physics.add.image(400, 200, "Bird1");
+        this.bird2.setCircle(25);
+        this.bird2.setOffset(8, 0);
         this.bird2.setCollideWorldBounds(true);
-        this.bird2.setImmovable(false); // Hacer que el objeto pueda moverse pero colisione
-        this.bird2.setBounce(0);  // Sin rebote al colisionar para efecto sólido
+        this.bird2.setImmovable(false);
+        this.bird2.setBounce(0);
 
 
         this.physics.add.collider(this.bird, this.bird2);
@@ -55,32 +59,32 @@ class Bootloader extends Phaser.Scene {
     update(time, delta) {
         // Movimiento de bird (controlado con WASD)
         if (this.TA.isDown) {
-            this.bird.setVelocityX(-100);
+            this.bird.setVelocityX(-300);
             this.bird.flipX = true;
         } else if (this.TD.isDown) {
-            this.bird.setVelocityX(100);
+            this.bird.setVelocityX(300);
             this.bird.flipX = false;
         }
 
         if (this.TW.isDown) {
-            this.bird.setVelocityY(-100);
+            this.bird.setVelocityY(-150);
         } else if (this.TS.isDown) {
-            this.bird.setVelocityY(100);
+            this.bird.setVelocityY(150);
         }
 
         // Movimiento de bird2 (controlado con flechas)
         if (this.cursors.left.isDown) {
-            this.bird2.setVelocityX(-100);
+            this.bird2.setVelocityX(-300);
             this.bird2.flipX = true;
         } else if (this.cursors.right.isDown) {
-            this.bird2.setVelocityX(100);
+            this.bird2.setVelocityX(300);
             this.bird2.flipX = false;
         }
 
         if (this.cursors.up.isDown) {
-            this.bird2.setVelocityY(-100);
+            this.bird2.setVelocityY(-150);
         } else if (this.cursors.down.isDown) {
-            this.bird2.setVelocityY(100);
+            this.bird2.setVelocityY(150);
         }
     }
 }
