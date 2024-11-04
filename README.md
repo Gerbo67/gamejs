@@ -30,7 +30,7 @@ npm install
 Para iniciar el servidor en modo de desarrollo, ejecuta:
 
 ```bash
-npm run dev
+npm run def
 ```
 
 El servidor se iniciará en `http://localhost:3001` o el puerto que hayas configurado en tu aplicación.
