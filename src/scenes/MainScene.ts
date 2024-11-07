@@ -54,7 +54,6 @@ class MainScene extends Phaser.Scene {
         this.bird2.update(); // Actualizar el segundo pájaro (Flechas)
 
         // Incrementar el puntaje de jugador 1 al presionar "W" (sin mantener presionado)
-        // Incrementar el puntaje de jugador 1 al presionar "W" (sin mantener presionado)
         if (this.bird.keys && this.bird.keys.up && Phaser.Input.Keyboard.JustDown(this.bird.keys.up)) {
             this.score1++;
             this.scoreText1.setText(`Jugador 1: ${this.score1}`);
