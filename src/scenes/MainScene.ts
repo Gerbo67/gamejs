@@ -1,70 +1,73 @@
 import Phaser from 'phaser';
-import Bird from '../entities/Bird';
+import Ship from '../entities/Ship';
 
 class MainScene extends Phaser.Scene {
-    private bird!: Bird;
-    private bird2!: Bird;
-    private cursors!: Phaser.Input.Keyboard.CursorKeys;
-
-    // Variables de puntuación y texto
-    private score1: number = 0;
-    private score2: number = 0;
-    private scoreText1!: Phaser.GameObjects.Text;
-    private scoreText2!: Phaser.GameObjects.Text;
-    private nameText1!: Phaser.GameObjects.Text;
-    private nameText2!: Phaser.GameObjects.Text;
+    private player!: Ship;
+    private meteorites!: Phaser.Physics.Arcade.Group;
+    private score = 0;
+    private scoreText!: Phaser.GameObjects.Text;
+    private lives = 2;
 
     constructor() {
-        super({ key: 'MainScene' });
+        super({key: 'MainScene'});
     }
 
     create(): void {
-        // Fondo de la escena
-        this.add.image(this.scale.width / 2, this.scale.height / 2, 'background')
-            .setOrigin(0.5, 0.5)
-            .setDisplaySize(this.scale.width, this.scale.height);
+        // Fondo
+        this.add.tileSprite(400, 300, 800, 600, 'space').setScrollFactor(0);
 
-        // Música de la escena
-        const miAudio = this.sound.add("8bits");
-        miAudio.play('', { loop: true });
+        // Jugador
+        this.player = new Ship(this, 100, 300, 'player');
 
-        // Crear las teclas de flecha
-        this.cursors = this.input.keyboard!.createCursorKeys();
+        // Meteoritos
+        this.meteorites = this.physics.add.group();
+        this.time.addEvent({
+            delay: 1000,
+            callback: this.spawnMeteorite,
+            callbackScope: this,
+            loop: true,
+        });
 
-        // Instanciar el primer pájaro (controlado con WASD)
-        this.bird = new Bird(this, 200, 200, "Bird1");
+        // Puntuación
+        this.scoreText = this.add.text(16, 16, 'Tiempo: 0', {fontSize: '20px', color: '#ffffff'});
 
-        // Instanciar el segundo pájaro (controlado con las flechas)
-        this.bird2 = new Bird(this, 400, 200, "Bird2", this.cursors);
-
-        // Colisionar ambos pájaros
-        this.physics.add.collider(this.bird.sprite, this.bird2.sprite);
-
-        // Añadir el marcador de puntuación
-        this.scoreText1 = this.add.text(10, 10, 'Jugador 1: 0', { fontSize: '16px', color: '#ffffff' });
-        this.scoreText2 = this.add.text(10, 30, 'Jugador 2: 0', { fontSize: '16px', color: '#ffffff' });
-
-        // Añadir nombres sobre cada jugador
-        this.nameText1 = this.add.text(200, 160, 'Jugador 1', { fontSize: '16px', color: '#ffffff' }).setOrigin(0.5);
-        this.nameText2 = this.add.text(400, 160, 'Jugador 2', { fontSize: '16px', color: '#ffffff' }).setOrigin(0.5);
+        // Colisiones entre el jugador y los meteoritos
+        this.physics.add.overlap(this.player.sprite, this.meteorites, this.handleCollision, undefined, this);
     }
 
-    update(): void {
-        this.bird.update();  // Actualizar el primer pájaro (WASD)
-        this.bird2.update(); // Actualizar el segundo pájaro (Flechas)
+    update(time: number, delta: number): void {
+        // Actualiza la nave espacial
+        this.player.update();
 
-        // Incrementar el puntaje de jugador 1 al presionar "W" (sin mantener presionado)
-        if (this.bird.keys && this.bird.keys.up && Phaser.Input.Keyboard.JustDown(this.bird.keys.up)) {
-            this.score1++;
-            this.scoreText1.setText(`Jugador 1: ${this.score1}`);
-        }
+        // Actualiza el tiempo de supervivencia
+        this.score += delta / 1000; // Tiempo en segundos
+        this.scoreText.setText(`Tiempo: ${Math.floor(this.score)}`);
+    }
 
-        // Incrementar el puntaje de jugador 2 al presionar la flecha "Arriba" (sin mantener presionado)
-        if (this.cursors.up && Phaser.Input.Keyboard.JustDown(this.cursors.up)) {
-            this.score2++;
-            this.scoreText2.setText(`Jugador 2: ${this.score2}`);
+    private spawnMeteorite(): void {
+        const x = 800; // Aparece a la derecha de la pantalla
+        const y = Phaser.Math.Between(0, 600);
+        const meteorite = this.meteorites.create(x, y, 'meteorite') as Phaser.Physics.Arcade.Sprite;
+        meteorite.setVelocityX(-200); // Se mueve hacia la izquierda
+        meteorite.setCollideWorldBounds(true);
+        meteorite.setBounce(1);
+    }
+
+    private handleCollision(player: Phaser.GameObjects.GameObject, meteorite: Phaser.GameObjects.GameObject): void {
+        const playerSprite = player as Phaser.Physics.Arcade.Sprite;
+        const meteoriteSprite = meteorite as Phaser.Physics.Arcade.Sprite;
+
+        this.lives -= 1;
+        meteoriteSprite.destroy();
+
+        if (this.lives <= 0) {
+            this.scene.restart();
+            this.lives = 2;
+            this.score = 0;
         }
     }
+
+
 }
 
 export default MainScene;
