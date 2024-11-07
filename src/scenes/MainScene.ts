@@ -30,7 +30,7 @@ class MainScene extends Phaser.Scene {
         // Jugador 2 (controlado con flechas)
         this.player2 = new Bird(this, 200, 300, 'player2', this.cursors);
 
-        // Meteoritos
+        // Bolas de fuego
         this.meteorites = this.physics.add.group();
         this.time.addEvent({
             delay: 1000,
