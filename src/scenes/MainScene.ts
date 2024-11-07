@@ -19,7 +19,7 @@ class MainScene extends Phaser.Scene {
 
     create(): void {
         // Fondo
-        this.add.tileSprite(400, 300, 800, 600, 'space').setScrollFactor(0);
+        this.add.tileSprite(400, 300, 800, 600, 'sky').setScrollFactor(0);
 
         // Inicializa las teclas de flechas para el jugador 2
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -64,7 +64,7 @@ class MainScene extends Phaser.Scene {
 
         const x = 800; // Aparece a la derecha de la pantalla
         const y = Phaser.Math.Between(0, 600);
-        const meteorite = this.meteorites.create(x, y, 'meteorite') as Phaser.Physics.Arcade.Sprite;
+        const meteorite = this.meteorites.create(x, y, 'fireball') as Phaser.Physics.Arcade.Sprite;
         meteorite.setVelocityX(-200); // Se mueve hacia la izquierda
         meteorite.setCollideWorldBounds(true);
         meteorite.setBounce(1);
