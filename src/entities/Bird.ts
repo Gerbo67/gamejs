@@ -3,7 +3,7 @@ import Phaser from 'phaser';
 class Bird {
     public sprite: Phaser.Physics.Arcade.Image;
     private readonly cursors?: Phaser.Input.Keyboard.CursorKeys; // Cambiar a Phaser.Input.Keyboard.CursorKeys
-    private readonly keys?: { [key: string]: Phaser.Input.Keyboard.Key };
+    readonly keys?: { [key: string]: Phaser.Input.Keyboard.Key };
 
     constructor(scene: Phaser.Scene, x: number, y: number, texture: string, controlKeys?: Phaser.Input.Keyboard.CursorKeys) {
         this.sprite = scene.physics.add.image(x, y, texture);

@@ -10,6 +10,7 @@ class Bootloader extends Phaser.Scene {
 
         this.load.path = "./assets/";
         this.load.image("Bird1", "./images/bird.png");
+        this.load.image("Bird2", "./images/bird2.png");
         this.load.image("background", "./images/landscape.png");
 
         this.load.audio("8bits", ["./sounds/8bits.ogg"])
